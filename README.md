@@ -1,0 +1,1 @@
+Serverless function to redirect multi-arch docker builds to proper easy-add download
