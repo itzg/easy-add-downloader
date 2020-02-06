@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-func Handler(w http.ResponseWriter, r *http.Request) {
+func DownloadHandler(w http.ResponseWriter, r *http.Request) {
 	if r.Method != "GET" {
 		w.WriteHeader(http.StatusMethodNotAllowed)
 		return
@@ -26,8 +26,14 @@ func Handler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	suffix := strings.ReplaceAll(platform, "/", "_")
+	parts := strings.SplitN(platform, "/", 3)
+	os := parts[0]
+	arch := parts[1]
+	variant := ""
+	if len(parts) == 3 {
+		variant = parts[2]
+	}
 
-	w.Header().Set("Location", fmt.Sprintf("https://github.com/itzg/easy-add/releases/download/%s/easy-add_%s", version, suffix))
+	w.Header().Set("Location", fmt.Sprintf("https://github.com/itzg/easy-add/releases/download/%s/easy-add_%s_%s%s", version, os, arch, variant))
 	w.WriteHeader(http.StatusTemporaryRedirect)
 }
